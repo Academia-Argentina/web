@@ -12,17 +12,44 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
     .fade-in {
       animation: fadeIn 0.5s ease-out;
     }
     
     .card-hover {
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card-hover::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .card-hover:hover::before {
+      left: 100%;
     }
     
     .card-hover:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 12px 24px rgba(59, 130, 246, 0.3);
     }
     
     .notification {
@@ -46,36 +73,86 @@
       font-weight: 600;
     }
     
-    .status-active {
-      background-color: #dcfce7;
-      color: #166534;
+    .license-type-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin: 2px;
     }
     
-    .status-warning {
-      background-color: #fef3c7;
-      color: #92400e;
+    .type-deportivo {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+    }
+    
+    .type-electrico {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+    }
+    
+    .type-clasico {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+    }
+    
+    .checkbox-custom {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #3b82f6;
+    }
+    
+    .tab-button {
+      transition: all 0.3s ease;
+      position: relative;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    
+    .tab-button.active {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .icon-float {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .vehicle-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-left: 4px solid #3b82f6;
     }
   </style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
 
   <div class="max-w-7xl mx-auto px-4 py-6">
     
     <!-- PANTALLA DE INICIO -->
     <div id="pantallaInicio" class="min-h-screen flex items-center justify-center fade-in">
-      <div class="bg-white rounded-2xl shadow-xl p-12 text-center max-w-md w-full">
-        <div class="w-20 h-20 mx-auto mb-6 bg-blue-600 rounded-full flex items-center justify-center">
-          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="bg-white rounded-2xl shadow-2xl p-12 text-center max-w-md w-full border-t-4 border-blue-600">
+        <div class="w-24 h-24 mx-auto mb-6 gradient-bg rounded-full flex items-center justify-center icon-float">
+          <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
           Centro de Licencias
         </h1>
-        <p class="text-gray-600 mb-8">Argentina Roleplay</p>
+        <p class="text-gray-600 mb-8 text-lg">Argentina Roleplay</p>
         <button onclick="mostrarSistema()"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium transition duration-200">
+                class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-4 px-6 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl">
           Acceder al Sistema
         </button>
       </div>
@@ -85,104 +162,222 @@
     <div id="sistemaCompleto" class="hidden space-y-6 fade-in">
       
       <!-- HEADER -->
-      <div class="bg-white rounded-xl shadow-md p-6">
+      <div class="bg-white rounded-2xl shadow-lg p-6 border-b-4 border-blue-600">
         <div class="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">Sistema de Licencias</h1>
-            <p class="text-gray-600 mt-1">Argentina Roleplay</p>
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Sistema de Gestión
+            </h1>
+            <p class="text-gray-600 mt-1 font-medium">Argentina Roleplay</p>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="text-right">
-              <p class="text-sm text-gray-600">Total de Licencias</p>
-              <p id="contadorHeader" class="text-2xl font-bold text-blue-600">0</p>
+          <div class="flex items-center gap-6">
+            <div class="text-center bg-blue-50 px-6 py-3 rounded-xl">
+              <p class="text-sm text-blue-600 font-semibold">Licencias</p>
+              <p id="contadorLicencias" class="text-3xl font-bold text-blue-700">0</p>
+            </div>
+            <div class="text-center bg-purple-50 px-6 py-3 rounded-xl">
+              <p class="text-sm text-purple-600 font-semibold">Vehículos</p>
+              <p id="contadorVehiculos" class="text-3xl font-bold text-purple-700">0</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- BARRA DE BÚSQUEDA Y ACCIONES -->
-      <div class="bg-white rounded-xl shadow-md p-6">
-        <div class="flex flex-col sm:flex-row gap-4">
-          <div class="flex-1 relative">
-            <input id="searchInput"
-                   type="text"
-                   placeholder="Buscar por nombre o número de registro..."
-                   class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-            <svg class="w-5 h-5 absolute left-3 top-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-          <button onclick="solicitarClave()"
-                  class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition duration-200 whitespace-nowrap">
-            Registrar Licencia
+      <!-- PESTAÑAS -->
+      <div class="bg-white rounded-2xl shadow-lg p-4">
+        <div class="flex gap-3">
+          <button onclick="cambiarTab('licencias')" id="tabLicencias" 
+                  class="tab-button active flex-1 py-3 px-6">
+            <span class="flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+              Licencias
+            </span>
+          </button>
+          <button onclick="cambiarTab('vehiculos')" id="tabVehiculos" 
+                  class="tab-button flex-1 py-3 px-6 bg-gray-100 text-gray-700">
+            <span class="flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              Vehículos
+            </span>
           </button>
         </div>
       </div>
 
-      <!-- LISTA DE LICENCIAS -->
-      <div class="bg-white rounded-xl shadow-md p-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Registro de Licencias</h2>
-        <div id="listaLicencias" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- SECCIÓN LICENCIAS -->
+      <div id="seccionLicencias">
+        <!-- BARRA DE BÚSQUEDA Y ACCIONES -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div class="flex-1 relative">
+              <input id="searchInputLicencias"
+                     type="text"
+                     placeholder="Buscar por nombre o número de registro..."
+                     class="w-full pl-10 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+              <svg class="w-5 h-5 absolute left-3 top-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <button onclick="solicitarClaveLicencia()"
+                    class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-3 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl whitespace-nowrap">
+              ✨ Registrar Licencia
+            </button>
+          </div>
+        </div>
+
+        <!-- LISTA DE LICENCIAS -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span class="w-2 h-8 bg-gradient-to-b from-blue-600 to-blue-400 rounded-full"></span>
+            Registro de Licencias
+          </h2>
+          <div id="listaLicencias" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          </div>
+        </div>
+
+        <!-- FORMULARIO LICENCIA -->
+        <div id="formularioLicencia" class="hidden bg-white rounded-2xl shadow-lg p-6 sm:p-8 fade-in border-t-4 border-blue-600">
+          <div class="max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+              <span id="tituloFormLicencia">Registrar Nueva Licencia</span>
+            </h2>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre y Apellido</label>
+                <input id="nombreLicencia" type="text" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Juan Pérez" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Tipos de Licencia (Selecciona los que correspondan)</label>
+                <div class="space-y-2 bg-gray-50 p-4 rounded-xl">
+                  <label class="flex items-center gap-3 cursor-pointer hover:bg-white p-3 rounded-lg transition">
+                    <input type="checkbox" value="Deportivos" class="checkbox-custom" />
+                    <span class="license-type-badge type-deportivo">🏎️ Deportivos</span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer hover:bg-white p-3 rounded-lg transition">
+                    <input type="checkbox" value="Eléctricos" class="checkbox-custom" />
+                    <span class="license-type-badge type-electrico">⚡ Eléctricos</span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer hover:bg-white p-3 rounded-lg transition">
+                    <input type="checkbox" value="Clásicos" class="checkbox-custom" />
+                    <span class="license-type-badge type-clasico">🏛️ Clásicos</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Número de Registro</label>
+                <input id="numeroLicencia" type="text" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="DL-2024-001234" />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha de Registro</label>
+                  <input id="fechaRegistroLicencia" type="date" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha de Renovación</label>
+                  <input id="fechaRenovacionLicencia" type="date" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Firma del Responsable</label>
+                <input id="firmaLicencia" type="text" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Dr. Carlos Rodríguez" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Foto de Perfil</label>
+                <input type="file" accept="image/*" id="fotoInputLicencia" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 file:font-semibold hover:file:bg-blue-100" />
+                <img id="fotoPreviewLicencia" class="mt-4 w-32 h-32 object-cover rounded-xl hidden border-4 border-blue-200 mx-auto shadow-lg" />
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 mt-8">
+              <button onclick="guardarLicencia()" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-4 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl">
+                💾 <span id="btnTextLicencia">Registrar Licencia</span>
+              </button>
+              <button onclick="cerrarFormularioLicencia()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-4 rounded-xl font-semibold transition duration-200">
+                ❌ Cancelar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- FORMULARIO -->
-      <div id="formulario" class="hidden bg-white rounded-xl shadow-md p-6 sm:p-8 fade-in">
-        <div class="max-w-2xl mx-auto">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6">Registrar Nueva Licencia</h2>
-
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Nombre y Apellido</label>
-              <input id="nombre" type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Juan Pérez" />
+      <!-- SECCIÓN VEHÍCULOS -->
+      <div id="seccionVehiculos" class="hidden">
+        <!-- BARRA DE BÚSQUEDA Y ACCIONES -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div class="flex-1 relative">
+              <input id="searchInputVehiculos"
+                     type="text"
+                     placeholder="Buscar por modelo, matrícula o dueño..."
+                     class="w-full pl-10 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" />
+              <svg class="w-5 h-5 absolute left-3 top-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Licencia</label>
-              <select id="tipoLicencia" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <option value="">Seleccione una licencia</option>
-                <option value="Deportivos">Deportivos</option>
-                <option value="Eléctricos">Eléctricos</option>
-                <option value="Clásicos">Clásicos</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Número de Registro</label>
-              <input id="numero" type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="DL-2024-001234" />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de Registro</label>
-                <input id="fechaRegistro" type="date" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-              </div>
-
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de Renovación</label>
-                <input id="fechaRenovacion" type="date" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Firma del Responsable</label>
-              <input id="firma" type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Dr. Carlos Rodríguez" />
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Foto de Perfil</label>
-              <input type="file" accept="image/*" id="fotoInput" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg" />
-              <img id="fotoPreview" class="mt-4 w-32 h-32 object-cover rounded-lg hidden border-2 border-gray-300 mx-auto" />
-            </div>
+            <button onclick="solicitarClaveVehiculo()"
+                    class="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-3 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl whitespace-nowrap">
+              🚗 Registrar Vehículo
+            </button>
           </div>
+        </div>
 
-          <div class="flex flex-col sm:flex-row gap-3 mt-6">
-            <button onclick="registrarLicencia()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition duration-200">
-              Registrar Licencia
-            </button>
-            <button onclick="cerrarFormulario()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-medium transition duration-200">
-              Cancelar
-            </button>
+        <!-- LISTA DE VEHÍCULOS -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span class="w-2 h-8 bg-gradient-to-b from-purple-600 to-purple-400 rounded-full"></span>
+            Registro de Vehículos
+          </h2>
+          <div id="listaVehiculos" class="space-y-4">
+          </div>
+        </div>
+
+        <!-- FORMULARIO VEHÍCULO -->
+        <div id="formularioVehiculo" class="hidden bg-white rounded-2xl shadow-lg p-6 sm:p-8 fade-in border-t-4 border-purple-600">
+          <div class="max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
+              <span id="tituloFormVehiculo">Registrar Nuevo Vehículo</span>
+            </h2>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Modelo del Vehículo</label>
+                <input id="modeloVehiculo" type="text" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Tesla Model S, Ferrari F8..." />
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Matrícula</label>
+                <input id="matriculaVehiculo" type="text" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="ABC 123" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Color</label>
+                <input id="colorVehiculo" type="text" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Rojo, Azul, Negro..." />
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Dueño del Vehículo</label>
+                <input id="duenoVehiculo" type="text" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Nombre del propietario" />
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 mt-8">
+              <button onclick="guardarVehiculo()" class="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white py-4 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl">
+                💾 <span id="btnTextVehiculo">Registrar Vehículo</span>
+              </button>
+              <button onclick="cerrarFormularioVehiculo()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-4 rounded-xl font-semibold transition duration-200">
+                ❌ Cancelar
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -190,45 +385,74 @@
     </div>
   </div>
 
-  <!-- MODAL DE DETALLES -->
-  <div id="modal" class="fixed inset-0 hidden items-center justify-center p-4 z-50 bg-black bg-opacity-50" onclick="cerrarModalClick(event)">
-    <div class="bg-white rounded-xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+  <!-- MODAL DE DETALLES LICENCIA -->
+  <div id="modalLicencia" class="fixed inset-0 hidden items-center justify-center p-4 z-50 bg-black bg-opacity-50" onclick="cerrarModalLicenciaClick(event)">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto shadow-2xl" onclick="event.stopPropagation()">
       <div class="flex items-start gap-6 mb-6">
-        <img id="modalFoto" class="w-32 h-32 rounded-lg object-cover border-2 border-gray-300 flex-shrink-0" />
+        <img id="modalFotoLicencia" class="w-32 h-32 rounded-xl object-cover border-4 border-blue-200 flex-shrink-0 shadow-lg" />
         <div class="flex-1">
-          <h3 id="modalNombre" class="text-2xl font-bold text-gray-900 mb-2"></h3>
-          <span id="modalEstado" class="status-badge status-active"></span>
+          <h3 id="modalNombreLicencia" class="text-2xl font-bold text-gray-900 mb-2"></h3>
+          <span id="modalEstadoLicencia" class="status-badge"></span>
+          <div id="modalTiposLicencia" class="mt-3"></div>
         </div>
       </div>
 
-      <div class="space-y-3 bg-gray-50 p-4 rounded-lg">
-        <div class="flex justify-between py-2 border-b border-gray-200">
-          <span class="font-medium text-gray-700">Tipo de Licencia:</span>
-          <span id="modalTipo" class="text-gray-900 font-medium"></span>
+      <div class="space-y-3 bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-xl">
+        <div class="flex justify-between py-2 border-b border-blue-200">
+          <span class="font-semibold text-gray-700">Número de Registro:</span>
+          <span id="modalNumeroLicencia" class="text-gray-900 font-medium"></span>
         </div>
-        <div class="flex justify-between py-2 border-b border-gray-200">
-          <span class="font-medium text-gray-700">Número de Registro:</span>
-          <span id="modalNumero" class="text-gray-900 font-medium"></span>
+        <div class="flex justify-between py-2 border-b border-blue-200">
+          <span class="font-semibold text-gray-700">Fecha de Registro:</span>
+          <span id="modalFechaRegistroLicencia" class="text-gray-900"></span>
         </div>
-        <div class="flex justify-between py-2 border-b border-gray-200">
-          <span class="font-medium text-gray-700">Fecha de Registro:</span>
-          <span id="modalFechaRegistro" class="text-gray-900"></span>
-        </div>
-        <div class="flex justify-between py-2 border-b border-gray-200">
-          <span class="font-medium text-gray-700">Fecha de Renovación:</span>
-          <span id="modalFechaRenovacion" class="text-gray-900"></span>
+        <div class="flex justify-between py-2 border-b border-blue-200">
+          <span class="font-semibold text-gray-700">Fecha de Renovación:</span>
+          <span id="modalFechaRenovacionLicencia" class="text-gray-900"></span>
         </div>
         <div class="flex justify-between py-2">
-          <span class="font-medium text-gray-700">Firma del Responsable:</span>
-          <span id="modalFirma" class="text-gray-900"></span>
+          <span class="font-semibold text-gray-700">Firma del Responsable:</span>
+          <span id="modalFirmaLicencia" class="text-gray-900"></span>
         </div>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-3 mt-6">
-        <button onclick="confirmarEliminar()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-medium transition duration-200">
-          Eliminar Licencia
+        <button onclick="editarLicencia()" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white py-3 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl">
+          ✏️ Editar Licencia
         </button>
-        <button onclick="cerrarModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-medium transition duration-200">
+        <button onclick="cerrarModalLicencia()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition duration-200">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE DETALLES VEHÍCULO -->
+  <div id="modalVehiculo" class="fixed inset-0 hidden items-center justify-center p-4 z-50 bg-black bg-opacity-50" onclick="cerrarModalVehiculoClick(event)">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto shadow-2xl" onclick="event.stopPropagation()">
+      <div class="mb-6">
+        <h3 id="modalModeloVehiculo" class="text-3xl font-bold text-gray-900 mb-4"></h3>
+        <div class="flex items-center gap-3">
+          <span id="modalMatriculaVehiculo" class="px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold rounded-lg text-lg"></span>
+        </div>
+      </div>
+
+      <div class="space-y-3 bg-gradient-to-br from-purple-50 to-pink-50 p-5 rounded-xl">
+        <div class="flex justify-between py-2 border-b border-purple-200">
+          <span class="font-semibold text-gray-700">Color:</span>
+          <span id="modalColorVehiculo" class="text-gray-900 font-medium"></span>
+        </div>
+        <div class="flex justify-between py-2">
+          <span class="font-semibold text-gray-700">Propietario:</span>
+          <span id="modalDuenoVehiculo" class="text-gray-900 font-medium"></span>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 mt-6">
+        <button onclick="editarVehiculo()" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white py-3 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl">
+          ✏️ Editar Vehículo
+        </button>
+        <button onclick="cerrarModalVehiculo()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition duration-200">
           Cerrar
         </button>
       </div>
@@ -237,19 +461,23 @@
 
   <script>
     let licencias = {};
+    let vehiculos = {};
     let licenciaActual = null;
-    const STORAGE_KEY = 'licenciasArgRP_v3';
+    let vehiculoActual = null;
+    let modoEdicion = false;
+    const STORAGE_KEY_LICENCIAS = 'licenciasArgRP_v4';
+    const STORAGE_KEY_VEHICULOS = 'vehiculosArgRP_v1';
     const MAX_IMAGE_SIZE = 400;
 
     function mostrarNotificacion(mensaje, tipo = 'success') {
       const colores = {
-        success: 'bg-green-600',
-        error: 'bg-red-600',
-        info: 'bg-blue-600'
+        success: 'bg-gradient-to-r from-green-500 to-green-600',
+        error: 'bg-gradient-to-r from-red-500 to-red-600',
+        info: 'bg-gradient-to-r from-blue-500 to-blue-600'
       };
 
       const notif = document.createElement('div');
-      notif.className = `notification ${colores[tipo]} text-white px-6 py-3 rounded-lg shadow-lg`;
+      notif.className = `notification ${colores[tipo]} text-white px-6 py-4 rounded-xl shadow-2xl font-semibold`;
       notif.textContent = mensaje;
       document.body.appendChild(notif);
 
@@ -296,28 +524,42 @@
       });
     }
 
-    function cargarLicencias() {
+    function cargarDatos() {
       try {
-        const data = localStorage.getItem(STORAGE_KEY);
-        if (data) {
-          licencias = JSON.parse(data);
-        }
+        const dataLic = localStorage.getItem(STORAGE_KEY_LICENCIAS);
+        if (dataLic) licencias = JSON.parse(dataLic);
+        
+        const dataVeh = localStorage.getItem(STORAGE_KEY_VEHICULOS);
+        if (dataVeh) vehiculos = JSON.parse(dataVeh);
       } catch (error) {
         console.error('Error al cargar:', error);
         licencias = {};
+        vehiculos = {};
       }
-      actualizarContador();
-      renderizarLicencias();
+      actualizarContadores();
     }
 
     function guardarLicencias() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(licencias));
+        localStorage.setItem(STORAGE_KEY_LICENCIAS, JSON.stringify(licencias));
         return true;
       } catch (error) {
         console.error('Error al guardar:', error);
         if (error.name === 'QuotaExceededError') {
-          mostrarNotificacion('Almacenamiento lleno. Elimina licencias antiguas.', 'error');
+          mostrarNotificacion('Almacenamiento lleno. Elimina datos antiguos.', 'error');
+        }
+        return false;
+      }
+    }
+
+    function guardarVehiculos() {
+      try {
+        localStorage.setItem(STORAGE_KEY_VEHICULOS, JSON.stringify(vehiculos));
+        return true;
+      } catch (error) {
+        console.error('Error al guardar:', error);
+        if (error.name === 'QuotaExceededError') {
+          mostrarNotificacion('Almacenamiento lleno. Elimina datos antiguos.', 'error');
         }
         return false;
       }
@@ -326,85 +568,116 @@
     function mostrarSistema() {
       document.getElementById("pantallaInicio").classList.add("hidden");
       document.getElementById("sistemaCompleto").classList.remove("hidden");
-      cargarLicencias();
+      cargarDatos();
+      renderizarLicencias();
+      renderizarVehiculos();
     }
 
-    function actualizarContador() {
-      const total = Object.keys(licencias).length;
-      document.getElementById("contadorHeader").textContent = total;
+    function actualizarContadores() {
+      document.getElementById("contadorLicencias").textContent = Object.keys(licencias).length;
+      document.getElementById("contadorVehiculos").textContent = Object.keys(vehiculos).length;
     }
 
-    function solicitarClave() {
+    function cambiarTab(tab) {
+      const tabLic = document.getElementById('tabLicencias');
+      const tabVeh = document.getElementById('tabVehiculos');
+      const secLic = document.getElementById('seccionLicencias');
+      const secVeh = document.getElementById('seccionVehiculos');
+
+      if (tab === 'licencias') {
+        tabLic.classList.add('active');
+        tabLic.classList.remove('bg-gray-100', 'text-gray-700');
+        tabVeh.classList.remove('active');
+        tabVeh.classList.add('bg-gray-100', 'text-gray-700');
+        secLic.classList.remove('hidden');
+        secVeh.classList.add('hidden');
+      } else {
+        tabVeh.classList.add('active');
+        tabVeh.classList.remove('bg-gray-100', 'text-gray-700');
+        tabLic.classList.remove('active');
+        tabLic.classList.add('bg-gray-100', 'text-gray-700');
+        secVeh.classList.remove('hidden');
+        secLic.classList.add('hidden');
+      }
+    }
+
+    // === LICENCIAS ===
+    function solicitarClaveLicencia() {
       const clave = prompt("Ingrese la clave de acceso:");
       
       if (clave === "LicenciasArgentina2025") {
-        mostrarFormulario();
+        modoEdicion = false;
+        mostrarFormularioLicencia();
       } else if (clave !== null) {
         mostrarNotificacion('Clave incorrecta', 'error');
       }
     }
 
-    function mostrarFormulario() {
-      document.getElementById("formulario").classList.remove("hidden");
+    function mostrarFormularioLicencia() {
+      document.getElementById("formularioLicencia").classList.remove("hidden");
+      document.getElementById("tituloFormLicencia").textContent = modoEdicion ? "Editar Licencia" : "Registrar Nueva Licencia";
+      document.getElementById("btnTextLicencia").textContent = modoEdicion ? "Guardar Cambios" : "Registrar Licencia";
       setTimeout(() => {
-        document.getElementById("formulario").scrollIntoView({ behavior: 'smooth' });
+        document.getElementById("formularioLicencia").scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
 
-    function cerrarFormulario() {
-      document.getElementById("formulario").classList.add("hidden");
-      limpiarFormulario();
+    function cerrarFormularioLicencia() {
+      document.getElementById("formularioLicencia").classList.add("hidden");
+      limpiarFormularioLicencia();
+      modoEdicion = false;
     }
 
-    function limpiarFormulario() {
-      document.getElementById("nombre").value = "";
-      document.getElementById("tipoLicencia").value = "";
-      document.getElementById("numero").value = "";
-      document.getElementById("fechaRegistro").value = "";
-      document.getElementById("fechaRenovacion").value = "";
-      document.getElementById("firma").value = "";
-      document.getElementById("fotoInput").value = "";
-      document.getElementById("fotoPreview").classList.add("hidden");
+    function limpiarFormularioLicencia() {
+      document.getElementById("nombreLicencia").value = "";
+      document.querySelectorAll('#formularioLicencia .checkbox-custom').forEach(cb => cb.checked = false);
+      document.getElementById("numeroLicencia").value = "";
+      document.getElementById("fechaRegistroLicencia").value = "";
+      document.getElementById("fechaRenovacionLicencia").value = "";
+      document.getElementById("firmaLicencia").value = "";
+      document.getElementById("fotoInputLicencia").value = "";
+      document.getElementById("fotoPreviewLicencia").classList.add("hidden");
     }
 
-    document.getElementById("fotoInput").addEventListener("change", async function(e) {
+    document.getElementById("fotoInputLicencia").addEventListener("change", async function(e) {
       const file = e.target.files[0];
       if (!file) return;
 
       try {
         const compressed = await comprimirImagen(file);
-        const preview = document.getElementById("fotoPreview");
+        const preview = document.getElementById("fotoPreviewLicencia");
         preview.src = compressed;
         preview.classList.remove("hidden");
-        mostrarNotificacion('Imagen cargada correctamente', 'success');
+        mostrarNotificacion('✅ Imagen cargada correctamente', 'success');
       } catch (error) {
         mostrarNotificacion('Error al procesar imagen', 'error');
       }
     });
 
-    function registrarLicencia() {
-      const nombre = document.getElementById("nombre").value.trim();
-      const tipoLicencia = document.getElementById("tipoLicencia").value;
-      const numero = document.getElementById("numero").value.trim();
-      const fechaRegistro = document.getElementById("fechaRegistro").value;
-      const fechaRenovacion = document.getElementById("fechaRenovacion").value;
-      const firma = document.getElementById("firma").value.trim();
-      const fotoSrc = document.getElementById("fotoPreview").src;
+    function guardarLicencia() {
+      const nombre = document.getElementById("nombreLicencia").value.trim();
+      const checkboxes = document.querySelectorAll('#formularioLicencia .checkbox-custom:checked');
+      const tiposLicencia = Array.from(checkboxes).map(cb => cb.value);
+      const numero = document.getElementById("numeroLicencia").value.trim();
+      const fechaRegistro = document.getElementById("fechaRegistroLicencia").value;
+      const fechaRenovacion = document.getElementById("fechaRenovacionLicencia").value;
+      const firma = document.getElementById("firmaLicencia").value.trim();
+      const fotoSrc = document.getElementById("fotoPreviewLicencia").src;
 
-      if (!nombre || !tipoLicencia || !numero || !fechaRegistro || !fechaRenovacion || !firma || !fotoSrc || fotoSrc.includes('data:image/svg')) {
-        mostrarNotificacion('Complete todos los campos incluyendo la foto', 'error');
+      if (!nombre || tiposLicencia.length === 0 || !numero || !fechaRegistro || !fechaRenovacion || !firma || !fotoSrc || fotoSrc.includes('data:image/svg')) {
+        mostrarNotificacion('❌ Complete todos los campos incluyendo foto y al menos un tipo de licencia', 'error');
         return;
       }
 
-      if (licencias[numero]) {
+      if (!modoEdicion && licencias[numero]) {
         mostrarNotificacion('Ya existe una licencia con ese número', 'error');
         return;
       }
 
       const licencia = {
-        id: Date.now(),
+        id: modoEdicion ? licenciaActual.id : Date.now(),
         nombre,
-        tipoLicencia,
+        tiposLicencia,
         numero,
         fechaRegistro,
         fechaRenovacion,
@@ -412,24 +685,31 @@
         foto: fotoSrc
       };
 
+      if (modoEdicion) {
+        delete licencias[licenciaActual.numero];
+      }
+
       licencias[numero] = licencia;
       
       if (guardarLicencias()) {
-        mostrarNotificacion('Licencia registrada exitosamente', 'success');
-        cerrarFormulario();
-        actualizarContador();
+        mostrarNotificacion(modoEdicion ? '✅ Licencia actualizada exitosamente' : '✅ Licencia registrada exitosamente', 'success');
+        cerrarFormularioLicencia();
+        actualizarContadores();
         renderizarLicencias();
+        modoEdicion = false;
       }
     }
 
     function calcularEstado(fechaRenovacion) {
       const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
       const renovacion = new Date(fechaRenovacion);
+      renovacion.setHours(0, 0, 0, 0);
       const diasRestantes = Math.floor((renovacion - hoy) / (1000 * 60 * 60 * 24));
       
-      if (diasRestantes < 0) return { texto: 'Vencida', clase: 'bg-red-100 text-red-800' };
-      if (diasRestantes < 30) return { texto: 'Por Vencer', clase: 'bg-yellow-100 text-yellow-800' };
-      return { texto: 'Vigente', clase: 'bg-green-100 text-green-800' };
+      if (diasRestantes < 0) return { texto: '❌ Vencida', clase: 'bg-red-100 text-red-800 border-2 border-red-300' };
+      if (diasRestantes <= 30) return { texto: '⚠️ Por Vencer', clase: 'bg-yellow-100 text-yellow-800 border-2 border-yellow-300' };
+      return { texto: '✅ Vigente', clase: 'bg-green-100 text-green-800 border-2 border-green-300' };
     }
 
     function renderizarLicencias() {
@@ -439,7 +719,7 @@
       const licenciasArray = Object.values(licencias);
 
       if (licenciasArray.length === 0) {
-        lista.innerHTML = '<div class="col-span-full text-center py-12"><p class="text-gray-600 text-lg">No hay licencias registradas</p></div>';
+        lista.innerHTML = '<div class="col-span-full text-center py-12"><div class="text-6xl mb-4">📋</div><p class="text-gray-600 text-lg font-semibold">No hay licencias registradas</p></div>';
         return;
       }
 
@@ -448,17 +728,26 @@
       licenciasArray.forEach(lic => {
         const estado = calcularEstado(lic.fechaRenovacion);
         const card = document.createElement("div");
-        card.className = "bg-gray-50 rounded-lg p-4 cursor-pointer card-hover border border-gray-200";
-        card.onclick = () => abrirModal(lic);
+        card.className = "bg-gradient-to-br from-white to-blue-50 rounded-xl p-4 cursor-pointer card-hover border-2 border-blue-200";
+        card.onclick = () => abrirModalLicencia(lic);
+
+        const tiposBadges = lic.tiposLicencia.map(tipo => {
+          const clases = {
+            'Deportivos': 'type-deportivo',
+            'Eléctricos': 'type-electrico',
+            'Clásicos': 'type-clasico'
+          };
+          return `<span class="license-type-badge ${clases[tipo]}">${tipo}</span>`;
+        }).join('');
 
         card.innerHTML = `
           <div class="flex gap-4">
-            <img src="${lic.foto}" class="w-20 h-20 object-cover rounded-lg border-2 border-gray-300 flex-shrink-0" />
+            <img src="${lic.foto}" class="w-20 h-20 object-cover rounded-xl border-4 border-blue-300 flex-shrink-0 shadow-md" />
             <div class="flex-1 min-w-0">
               <h3 class="font-bold text-lg truncate text-gray-900">${lic.nombre}</h3>
-              <p class="text-sm text-gray-600">${lic.tipoLicencia}</p>
-              <p class="text-sm text-gray-500 truncate">${lic.numero}</p>
-              <span class="status-badge ${estado.clase} mt-2">${estado.texto}</span>
+              <div class="flex flex-wrap gap-1 mt-1">${tiposBadges}</div>
+              <p class="text-sm text-gray-500 truncate mt-1">${lic.numero}</p>
+              <span class="status-badge ${estado.clase} mt-2 text-xs">${estado.texto}</span>
             </div>
           </div>
         `;
@@ -467,50 +756,213 @@
       });
     }
 
-    function abrirModal(lic) {
+    function abrirModalLicencia(lic) {
       licenciaActual = lic;
       const estado = calcularEstado(lic.fechaRenovacion);
       
-      document.getElementById("modalFoto").src = lic.foto;
-      document.getElementById("modalNombre").textContent = lic.nombre;
-      document.getElementById("modalEstado").textContent = estado.texto;
-      document.getElementById("modalEstado").className = `status-badge ${estado.clase}`;
-      document.getElementById("modalTipo").textContent = lic.tipoLicencia;
-      document.getElementById("modalNumero").textContent = lic.numero;
-      document.getElementById("modalFechaRegistro").textContent = lic.fechaRegistro;
-      document.getElementById("modalFechaRenovacion").textContent = lic.fechaRenovacion;
-      document.getElementById("modalFirma").textContent = lic.firma;
+      document.getElementById("modalFotoLicencia").src = lic.foto;
+      document.getElementById("modalNombreLicencia").textContent = lic.nombre;
+      document.getElementById("modalEstadoLicencia").textContent = estado.texto;
+      document.getElementById("modalEstadoLicencia").className = `status-badge ${estado.clase}`;
       
-      document.getElementById("modal").classList.remove("hidden");
-      document.getElementById("modal").classList.add("flex");
+      const tiposBadges = lic.tiposLicencia.map(tipo => {
+        const clases = {
+          'Deportivos': 'type-deportivo',
+          'Eléctricos': 'type-electrico',
+          'Clásicos': 'type-clasico'
+        };
+        return `<span class="license-type-badge ${clases[tipo]}">${tipo}</span>`;
+      }).join('');
+      document.getElementById("modalTiposLicencia").innerHTML = tiposBadges;
+      
+      document.getElementById("modalNumeroLicencia").textContent = lic.numero;
+      document.getElementById("modalFechaRegistroLicencia").textContent = lic.fechaRegistro;
+      document.getElementById("modalFechaRenovacionLicencia").textContent = lic.fechaRenovacion;
+      document.getElementById("modalFirmaLicencia").textContent = lic.firma;
+      
+      document.getElementById("modalLicencia").classList.remove("hidden");
+      document.getElementById("modalLicencia").classList.add("flex");
       document.body.style.overflow = 'hidden';
     }
 
-    function cerrarModal() {
-      document.getElementById("modal").classList.add("hidden");
-      document.getElementById("modal").classList.remove("flex");
+    function cerrarModalLicencia() {
+      document.getElementById("modalLicencia").classList.add("hidden");
+      document.getElementById("modalLicencia").classList.remove("flex");
       document.body.style.overflow = 'auto';
     }
 
-    function cerrarModalClick(event) {
-      if (event.target.id === 'modal') {
-        cerrarModal();
+    function cerrarModalLicenciaClick(event) {
+      if (event.target.id === 'modalLicencia') {
+        cerrarModalLicencia();
       }
     }
 
-    function confirmarEliminar() {
-      if (confirm("¿Está seguro que desea eliminar esta licencia?\n\nEsta acción no se puede deshacer.")) {
-        delete licencias[licenciaActual.numero];
-        if (guardarLicencias()) {
-          mostrarNotificacion('Licencia eliminada correctamente', 'success');
-          cerrarModal();
-          actualizarContador();
-          renderizarLicencias();
-        }
+    function editarLicencia() {
+      modoEdicion = true;
+      cerrarModalLicencia();
+      
+      document.getElementById("nombreLicencia").value = licenciaActual.nombre;
+      document.querySelectorAll('#formularioLicencia .checkbox-custom').forEach(cb => {
+        cb.checked = licenciaActual.tiposLicencia.includes(cb.value);
+      });
+      document.getElementById("numeroLicencia").value = licenciaActual.numero;
+      document.getElementById("fechaRegistroLicencia").value = licenciaActual.fechaRegistro;
+      document.getElementById("fechaRenovacionLicencia").value = licenciaActual.fechaRenovacion;
+      document.getElementById("firmaLicencia").value = licenciaActual.firma;
+      
+      const preview = document.getElementById("fotoPreviewLicencia");
+      preview.src = licenciaActual.foto;
+      preview.classList.remove("hidden");
+      
+      mostrarFormularioLicencia();
+    }
+
+    // === VEHÍCULOS ===
+    function solicitarClaveVehiculo() {
+      const clave = prompt("Ingrese la clave de acceso:");
+      
+      if (clave === "LicenciasArgentina2025") {
+        modoEdicion = false;
+        mostrarFormularioVehiculo();
+      } else if (clave !== null) {
+        mostrarNotificacion('Clave incorrecta', 'error');
       }
     }
 
-    document.getElementById("searchInput").addEventListener("input", function(e) {
+    function mostrarFormularioVehiculo() {
+      document.getElementById("formularioVehiculo").classList.remove("hidden");
+      document.getElementById("tituloFormVehiculo").textContent = modoEdicion ? "Editar Vehículo" : "Registrar Nuevo Vehículo";
+      document.getElementById("btnTextVehiculo").textContent = modoEdicion ? "Guardar Cambios" : "Registrar Vehículo";
+      setTimeout(() => {
+        document.getElementById("formularioVehiculo").scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+
+    function cerrarFormularioVehiculo() {
+      document.getElementById("formularioVehiculo").classList.add("hidden");
+      limpiarFormularioVehiculo();
+      modoEdicion = false;
+    }
+
+    function limpiarFormularioVehiculo() {
+      document.getElementById("modeloVehiculo").value = "";
+      document.getElementById("matriculaVehiculo").value = "";
+      document.getElementById("colorVehiculo").value = "";
+      document.getElementById("duenoVehiculo").value = "";
+    }
+
+    function guardarVehiculo() {
+      const modelo = document.getElementById("modeloVehiculo").value.trim();
+      const matricula = document.getElementById("matriculaVehiculo").value.trim().toUpperCase();
+      const color = document.getElementById("colorVehiculo").value.trim();
+      const dueno = document.getElementById("duenoVehiculo").value.trim();
+
+      if (!modelo || !matricula || !color || !dueno) {
+        mostrarNotificacion('❌ Complete todos los campos', 'error');
+        return;
+      }
+
+      if (!modoEdicion && vehiculos[matricula]) {
+        mostrarNotificacion('Ya existe un vehículo con esa matrícula', 'error');
+        return;
+      }
+
+      const vehiculo = {
+        id: modoEdicion ? vehiculoActual.id : Date.now(),
+        modelo,
+        matricula,
+        color,
+        dueno
+      };
+
+      if (modoEdicion) {
+        delete vehiculos[vehiculoActual.matricula];
+      }
+
+      vehiculos[matricula] = vehiculo;
+      
+      if (guardarVehiculos()) {
+        mostrarNotificacion(modoEdicion ? '✅ Vehículo actualizado exitosamente' : '✅ Vehículo registrado exitosamente', 'success');
+        cerrarFormularioVehiculo();
+        actualizarContadores();
+        renderizarVehiculos();
+        modoEdicion = false;
+      }
+    }
+
+    function renderizarVehiculos() {
+      const lista = document.getElementById("listaVehiculos");
+      lista.innerHTML = "";
+
+      const vehiculosArray = Object.values(vehiculos);
+
+      if (vehiculosArray.length === 0) {
+        lista.innerHTML = '<div class="text-center py-12"><div class="text-6xl mb-4">🚗</div><p class="text-gray-600 text-lg font-semibold">No hay vehículos registrados</p></div>';
+        return;
+      }
+
+      vehiculosArray.sort((a, b) => b.id - a.id);
+
+      vehiculosArray.forEach(veh => {
+        const card = document.createElement("div");
+        card.className = "vehicle-card rounded-xl p-5 cursor-pointer card-hover shadow-md";
+        card.onclick = () => abrirModalVehiculo(veh);
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <h3 class="font-bold text-xl text-gray-900 mb-1">🚗 ${veh.modelo}</h3>
+              <p class="text-sm text-gray-600"><span class="font-semibold">Matrícula:</span> <span class="px-2 py-1 bg-gray-800 text-white rounded font-mono">${veh.matricula}</span></p>
+              <p class="text-sm text-gray-600 mt-1"><span class="font-semibold">Color:</span> ${veh.color}</p>
+              <p class="text-sm text-gray-600"><span class="font-semibold">Propietario:</span> ${veh.dueno}</p>
+            </div>
+            <div class="text-5xl">🔑</div>
+          </div>
+        `;
+
+        lista.appendChild(card);
+      });
+    }
+
+    function abrirModalVehiculo(veh) {
+      vehiculoActual = veh;
+      
+      document.getElementById("modalModeloVehiculo").textContent = "🚗 " + veh.modelo;
+      document.getElementById("modalMatriculaVehiculo").textContent = veh.matricula;
+      document.getElementById("modalColorVehiculo").textContent = veh.color;
+      document.getElementById("modalDuenoVehiculo").textContent = veh.dueno;
+      
+      document.getElementById("modalVehiculo").classList.remove("hidden");
+      document.getElementById("modalVehiculo").classList.add("flex");
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarModalVehiculo() {
+      document.getElementById("modalVehiculo").classList.add("hidden");
+      document.getElementById("modalVehiculo").classList.remove("flex");
+      document.body.style.overflow = 'auto';
+    }
+
+    function cerrarModalVehiculoClick(event) {
+      if (event.target.id === 'modalVehiculo') {
+        cerrarModalVehiculo();
+      }
+    }
+
+    function editarVehiculo() {
+      modoEdicion = true;
+      cerrarModalVehiculo();
+      
+      document.getElementById("modeloVehiculo").value = vehiculoActual.modelo;
+      document.getElementById("matriculaVehiculo").value = vehiculoActual.matricula;
+      document.getElementById("colorVehiculo").value = vehiculoActual.color;
+      document.getElementById("duenoVehiculo").value = vehiculoActual.dueno;
+      
+      mostrarFormularioVehiculo();
+    }
+
+    // === BÚSQUEDA ===
+    document.getElementById("searchInputLicencias").addEventListener("input", function(e) {
       const busqueda = e.target.value.toLowerCase().trim();
       const cards = document.querySelectorAll("#listaLicencias > div");
       
@@ -526,23 +978,50 @@
       });
 
       if (visibles === 0 && busqueda) {
-        document.getElementById("listaLicencias").innerHTML = '<div class="col-span-full text-center py-12"><p class="text-gray-600">No se encontraron resultados</p></div>';
+        document.getElementById("listaLicencias").innerHTML = '<div class="col-span-full text-center py-12"><p class="text-gray-600 font-semibold">🔍 No se encontraron resultados</p></div>';
       } else if (visibles === 0 && !busqueda) {
         renderizarLicencias();
       }
     });
 
+    document.getElementById("searchInputVehiculos").addEventListener("input", function(e) {
+      const busqueda = e.target.value.toLowerCase().trim();
+      const cards = document.querySelectorAll("#listaVehiculos > div");
+      
+      let visibles = 0;
+      cards.forEach(card => {
+        const texto = card.textContent.toLowerCase();
+        if (texto.includes(busqueda)) {
+          card.style.display = "block";
+          visibles++;
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      if (visibles === 0 && busqueda) {
+        document.getElementById("listaVehiculos").innerHTML = '<div class="text-center py-12"><p class="text-gray-600 font-semibold">🔍 No se encontraron resultados</p></div>';
+      } else if (visibles === 0 && !busqueda) {
+        renderizarVehiculos();
+      }
+    });
+
+    // === TECLADO ===
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-        if (!document.getElementById('modal').classList.contains('hidden')) {
-          cerrarModal();
-        } else if (!document.getElementById('formulario').classList.contains('hidden')) {
-          cerrarFormulario();
+        if (!document.getElementById('modalLicencia').classList.contains('hidden')) {
+          cerrarModalLicencia();
+        } else if (!document.getElementById('modalVehiculo').classList.contains('hidden')) {
+          cerrarModalVehiculo();
+        } else if (!document.getElementById('formularioLicencia').classList.contains('hidden')) {
+          cerrarFormularioLicencia();
+        } else if (!document.getElementById('formularioVehiculo').classList.contains('hidden')) {
+          cerrarFormularioVehiculo();
         }
       }
     });
 
-    cargarLicencias();
+    cargarDatos();
   </script>
 </body>
 </html>
